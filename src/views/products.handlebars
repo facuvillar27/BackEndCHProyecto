@@ -1,0 +1,43 @@
+<button onclick="goToCart()">Mi carrito</button>
+<button onclick="addProductToStore()">Agregar nuevo producto a la tienda</button>
+{{#each products}}
+    <div>
+        <h2>{{this.title}}</h2>
+        <img src="{{this.thumbnail}}" alt="{{this.title}}">
+        <p>{{this.description}}</p>
+        <p>Precio: {{this.price}}</p>
+        <!-- Reemplaza 'cartId' con el ID real del carrito -->
+        <form id="cartForm-{{this._id}}" style="display: none;">
+            <input type="hidden" name="quantity" value="1">
+        </form>
+        <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+    </div>
+{{/each}}
+
+<script>
+function addToCart(productId) {
+    console.log(productId)
+    var form = document.getElementById('cartForm-' + productId);
+    fetch('/api/carts/65affd6a8722e83ec744519c/product/' + productId, {
+        method: 'POST',
+        body: new FormData(form)
+    }).then(function(response) {
+        if (response.ok) {
+            alert('Producto agregado al carrito');
+            window.location.href = "/products";
+        } else {
+            alert('Error al agregar el producto al carrito');
+        }
+    }).catch(function(error) {
+    console.error('Error:', error);
+    });
+}
+
+function goToCart() {
+    window.location.href = "/65affd6a8722e83ec744519c";
+}
+
+function addProductToStore() {
+    window.location.href = "/api/addProduct";
+}
+</script>

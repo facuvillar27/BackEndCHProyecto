@@ -1,0 +1,67 @@
+<form id="productForm" onsubmit="event.preventDefault(); submitForm();">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br>
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price"><br>
+    <label for="thumbnail">Thumbnail:</label><br>
+    <input type="text" id="thumbnail" name="thumbnail"><br>
+    <label for="code">Code:</label><br>
+    <input type="text" id="code" name="code"><br>
+    <label for="stock">Stock:</label><br>
+    <input type="number" id="stock" name="stock"><br>
+    <label for="status">Status:</label><br>
+    <select id="status" name="status">
+        <option value="true">Available</option>
+        <option value="false">Unavailable</option>
+    </select><br>
+    <label for="category">Category:</label><br>
+    <input type="text" id="category" name="category"><br>
+    <input type="submit" value="Agregar producto">
+</form>
+
+<button onclick="goToProducts()">Volver a productos</button>
+
+<script>
+    function goToProducts() {
+        window.location.href = "/products";
+    }
+
+    function formDataToJson(formData) {
+        let json = {};
+        for (let pair of formData.entries()) {
+            json[pair[0]] = pair[1];
+        }
+        return JSON.stringify(json);
+    }
+
+
+    function submitForm() {
+    let form = document.getElementById('productForm');
+    let formData = new FormData(form);
+    let jsonData = formDataToJson(formData);
+
+    fetch('/api/addProduct', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    }).then(function(response) {
+        if (response.ok) {
+            alert('Producto agregado correctamente');
+            form.reset();
+        } else {
+            response.json().then(function(data) {
+                alert('Error al agregar el producto: ' + data.error);
+            });
+        }
+    }).catch(function(error) {
+        console.error('Error de red:', error);
+        alert('Error de red: ' + error.message);
+    });
+}
+
+
+</script>

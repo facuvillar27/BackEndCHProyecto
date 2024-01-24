@@ -1,0 +1,19 @@
+<h1>Mi carrito</h1>
+
+{{#each products}}
+    <div>
+        <h2>{{this.title}}</h2>
+        <img src="{{this.thumbnail}}" alt="{{this.title}}">
+        <p>{{this.description}}</p>
+        <p>Precio: {{this.price}}</p>
+        <p>Cantidad: {{this.quantity}}</p>
+    </div>
+{{/each}}
+
+<button onclick="goToProducts()">Volver a productos</button>
+
+<script>
+    function goToProducts() {
+        window.location.href = "/products";
+    }
+</script>
